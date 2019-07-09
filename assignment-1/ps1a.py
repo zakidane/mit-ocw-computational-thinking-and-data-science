@@ -6,6 +6,8 @@
 
 from ps1_partition import get_partitions
 import time
+import operator
+from collections import OrderedDict
 
 #================================
 # Part A: Transporting Space Cows
@@ -31,7 +33,7 @@ def load_cows(filename):
     with open(filename) as f:
         for line in f:
             (key, val) = line.split(',')
-            cow_dict[key] = val
+            cow_dict[key] = int(val)
     print(cow_dict)
     return cow_dict
 
@@ -62,7 +64,9 @@ def greedy_cow_transport(cows,limit=10):
     """
     trip_list = []
     copyCows = cows.copy()
-    sortedCows = sorted(copyCows.items(), key = lambda x: x[1], reverse = True)
+
+    sortedCows = OrderedDict(sorted(copyCows.items(), key = lambda x: x[1], reverse = True))o
+    print('type of ', type(sortedCows))
     while sum(copyCows.values())>0:
         ship = []
         total = 0
@@ -96,21 +100,31 @@ def brute_force_cow_transport(cows,limit=10):
     trips
     """
     # TODO: Your code here
-    1. filter those list of lists that satisfy the condition i.e. limit is less than 10
-    a. how to get the limit
     partitions = get_partitions(cows)
-    min_partition = partitions[0]
+
     pruned_partitions = []
-    for trips in partitions :
-        for trip in trips:
+    for partition in partitions :
+        is_pruned = True
+        for trip in partition:
             sum_weights = 0
             for cow in trip:
-                sum_weights += cows[cow]
-            if sum_weights > limit:
-                break
 
-        if trip.length() < min_trip.length():
-            min_trip = trip
+                sum_weights += int(cows[cow])
+            if sum_weights > limit:
+                is_pruned = False
+                break
+        if is_pruned:
+            pruned_partitions.append(partition)
+   #now pruned_partitions contains all partitions in which each trip
+   #has weight less than 10
+    min_partition = pruned_partitions[0]
+    for partition in pruned_partitions:
+       if(len(partition) < len(min_partition)):
+           min_partition = partition
+
+    return min_partition
+
+
 
     return min_trip
 
@@ -130,5 +144,19 @@ def compare_cow_transport_algorithms():
     Does not return anything.
     """
     # TODO: Your code here
-    pass
-load_cows("ps1_cow_data.txt")
+
+    cows = load_cows("ps1_cow_data.txt")
+    print('min-trip is ')
+    start1 = time.time()
+    greedy_result = greedy_cow_transport(cows)
+    end1 = time.time()
+    print('Greedy cow transport function takes ', end1-start1, 'time.\n')
+    start2 = time.time()
+    brute_force_result = brute_force_cow_transport(cows,limit=10)
+    end2 = time.time()
+    print('Brute force method cow transport function takes ', end2-start2, 'time.\n')
+
+    print("Length of greedy result is ", greedy_result)
+    print("Length of brute force result is ", brute_force_result)
+
+compare_cow_transport_algorithms()
