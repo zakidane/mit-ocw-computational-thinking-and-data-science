@@ -1,0 +1,18 @@
+Problem 1. 
+ What are we required to do? 
+   Fill out WeightedEdge
+
+   def __init__(self, src, dest, total_distance, outdoor_distance):
+        pass  # TODO
+
+    def get_total_distance(self):
+        pass  # TODO
+
+    def get_outdoor_distance(self):
+        pass  # TODO
+
+    def __str__(self):
+        pass  # TODO
+   
+
+  Fill out Digraph
