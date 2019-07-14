@@ -45,12 +45,42 @@ def load_map(map_filename):
 
     # TODO
     print("Loading map from file...")
-
+#     Format for the graph file:
+#     Starting node, destination node, total weight of edge (distance), total distance spent outside
+# So steps:
+# 1. Create graph object
+# For every line:
+#  0. Save all numbers in variables (source, destination, total_distance, outdoor_distance)
+#  1. Create source_node object
+#  2.Create destination node object
+#  3. If graph has not(source_node) object:
+#       add_node to graph
+#     else get node from graph and save in src variable
+#     Do the same for destination object
+# 4. Create weightedEdge object from variables and objects
+# 5. Add edge to graph
 # Problem 2c: Testing load_map
 # Include the lines used to test load_map below, but comment them out
+    g = Digraph()
+    with open(map_filename) as f:
+            for line in f:
+                input = line.split()
+                source = input[0]
+                destination = input[1]
+                total_distance = input[2]
+                outdoor_distance = input[3]
+                src_object = Node(source)
+                dest_object = Node(destination)
+                if not(g.has_node(src_object)):
+                    g.add_node(src_object)
+                if not(g.has_node(dest_object)):
+                    g.add_node(dest_object)
+                edge_object = WeightedEdge(src_object, dest_object, total_distance, outdoor_distance)
+                if edge_object not in g.get_edges_for_node(src_object):
+                    g.add_edge(edge_object)
 
+    return g
 
-#
 # Problem 3: Finding the Shorest Path using Optimized Search Method
 #
 # Problem 3a: Objective function
@@ -95,8 +125,8 @@ def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,
         If there exists no path that satisfies max_total_dist and
         max_dist_outdoors constraints, then return None.
     """
-    # TODO
-    pass
+    
+
 
 
 # Problem 3c: Implement directed_dfs
@@ -129,9 +159,14 @@ def directed_dfs(digraph, start, end, max_total_dist, max_dist_outdoors):
         max_dist_outdoors constraints, then raises a ValueError.
     """
     # TODO
-    pass
-
-
+    path = []
+    start_object = Node(start)
+    end_object = Node(end)
+    returned_path = get_best_path(digraph, start_object, end_object, path, max_dist_outdoors, max_total_dist,[])
+    if returned_path == None:
+        raise ValueError
+    else:
+        return returned_path
 # ================================================================
 # Begin tests -- you do not need to modify anything below this line
 # ================================================================

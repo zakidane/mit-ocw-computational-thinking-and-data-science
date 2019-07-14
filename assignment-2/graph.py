@@ -108,7 +108,7 @@ class Digraph(object):
             raise ValueError
         else:
 
-            self.edges[src].append(edge)
+            self.edges[edge.src].append(edge)
 
 
 
