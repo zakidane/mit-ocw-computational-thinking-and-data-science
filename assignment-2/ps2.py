@@ -134,8 +134,7 @@ def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,
         return path
     for node in digraph.get_edges_for_node(start):
         if node.dest not in path: #avoid cycles
-                    newPath = get_best_path(digraph, node.dest, end, path, max_dist_outdoors, best_dist,
-                      best_path)
+                    newPath = get_best_path(digraph, node.dest, end, path, max_dist_outdoors, best_dist, best_path)
                     if newPath != None:
                        total_distance,total_distance_outdoor=getDistance(digraph,path)
                        if total_distance<=best_dist and total_distance_outdoor<=max_dist_outdoors:
@@ -145,11 +144,12 @@ def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,
 def getDistance(digraph, path):
     total_dist = 0
     outdoor_dist = 0
-    for i in range(len(path) - 1):
-        for edge in digraph.get_edges_for_node(Node(path[i])):
-            if edge.dest == path[i + 1]:
-                total_dist += int(edge.get_total_distance())
-                outdoor_dist += int(edge.get_outdoor_distance())
+    if len(path) > 0:
+        for i in range(len(path)-1):
+            for edge in digraph.get_edges_for_node(Node(path[i])):
+                if edge.dest == path[i + 1]:
+                    total_dist += int(edge.get_total_distance())
+                    outdoor_dist += int(edge.get_outdoor_distance())
     return (total_dist, outdoor_dist)
 
 
