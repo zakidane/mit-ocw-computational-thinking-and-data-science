@@ -218,19 +218,32 @@ def evaluate_models_on_training(x, y, models):
         None
     """
     # TODO
-    pylab.plot(x, y, 'bo', label = 'Data')
-    for model in models:
-        rsquared = r_squared(y, model)
-        degree = len(model) - 1
-        estYVals = pylab.polyval(model, x)
-        error = rSquared(y, estYVals)
-        pylab.plot(x, estYVals,
-                   label = 'Fit of degree '\
-                   + str(degrees[i])\
-                   + ', R2 = ' + str(round(error, 5)))
-    pylab.legend(loc = 'best')
-    pylab.title('Testing Graph for Generated Models')
-
+    for m in models:
+        if len(m)==2:
+            estimated=pylab.array(pylab.polyval(m,x))
+            pylab.scatter(x,y,c="b")
+            pylab.plot(x,estimated,c="r")
+            pylab.xlabel("years")
+            pylab.ylabel("Celsius")
+            r=r_squared(y, estimated)
+            se_over_slope2=se_over_slope(x, y, estimated, m)
+            pylab.title("For model with degree: "+str(len(m)-1)+" and " +"with R-square: " + str(r) + "\n"
+                        + "The data is linear so ratio of se_over_slope is "+ "\n"
+                        + str(se_over_slope2))
+            pylab.show()
+            pylab.pause(15)
+            pylab.close()
+        else:
+            estimated=pylab.array(pylab.polyval(m,x))
+            pylab.scatter(x,y,c="b")
+            pylab.plot(x,estimated,c="r")
+            pylab.xlabel("years")
+            pylab.ylabel("Celsius")
+            r=r_squared(y, estimated)
+            pylab.title("For model with degree: "+str(len(m)-1)+" and " +"with R-square: " + str(r))
+            pylab.show()
+            pylab.pause(15)
+            pylab.close()
 
 
 
